@@ -10,7 +10,7 @@ require_once __DIR__ . '/../models/ResourceType.php';
 class UploadController {
     public function handleUpload(): void {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $recaptchaSecret = '6LcUrJ8qAAAAAJyaQulVX5fwYmJ7RoKvvINzOdlo'; //getenv("RECAPTCHA_SECRET");
+            $recaptchaSecret = getenv("RECAPTCHA_SECRET");
 
             $response = $_POST['g-recaptcha-response'];
             $remoteIp = $_SERVER['REMOTE_ADDR'];
@@ -19,9 +19,9 @@ class UploadController {
 
             $captchaSuccess = json_decode($verify);
 
-//            if (!$captchaSuccess->success) {
-//                die('reCAPTCHA validation failed. Please try again.');
-//            }
+            if (!$captchaSuccess->success) {
+                die('reCAPTCHA validation failed. Please try again.');
+            }
 
             $data = [
                 'title' => $_POST['title'] ?? '',
@@ -35,14 +35,12 @@ class UploadController {
                 'file_url' => $_POST['file_url'] ?? null,
             ];
 
-            // Валидация данных
             $errors = Validator::validateUpload($data);
             if ($errors) {
                 include __DIR__ . '/../views/upload.php';
                 return;
             }
 
-            // Сохранение данных
             try {
                 $upload = new Upload();
                 $upload->save($data);

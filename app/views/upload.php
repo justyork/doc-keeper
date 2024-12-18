@@ -1,5 +1,14 @@
 <?php include __DIR__ . '/partials/header.php'; ?>
 
+<?php if (!empty($errors)): ?>
+    <div class="error-messages">
+        <ul>
+            <?php foreach ($errors as $error): ?>
+                <li><?= htmlspecialchars($error) ?></li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>
 <form action="/" method="POST" enctype="multipart/form-data">
     <div class="form-group char-counter">
         <label for="title">Title</label>
