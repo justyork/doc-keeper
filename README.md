@@ -212,7 +212,7 @@ This project is open-source and licensed under the **MIT License**.
 For questions or support regarding this project, please contact:
 
 **Email**: [yorkshp@gmail.com]  
-**Website**: [file-keeper.justyork.dev]
+**Website**: https://doc-keeper.justyork.dev
 
 ---
 
