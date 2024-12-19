@@ -30,6 +30,8 @@ class ViewController {
 
         $subjects = (new Subject())->getAll();
         $subtopics = (new Subtopic())->getAll();
+        $standards = (new Standard())->getAll();
+        $resource_types = (new ResourceType())->getAll();
 
         include __DIR__ . '/../views/view.php';
     }

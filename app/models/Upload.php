@@ -107,17 +107,32 @@ class Upload {
     private function handleFileUpload($file) {
         $config = include __DIR__ . '/../../config/config.php';
         $allowedExtensions = $config['allowed_extensions'];
+        $allowedMimeTypes = $config['allowed_mime_types'];
 
+        // Check file extension
         $fileExt = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         if (!in_array($fileExt, $allowedExtensions)) {
             throw new Exception("Invalid file extension: $fileExt");
         }
 
+        // Check MIME type using finfo
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mimeType = finfo_file($finfo, $file['tmp_name']);
+        finfo_close($finfo);
+
+        if (!in_array($mimeType, $allowedMimeTypes)) {
+            throw new Exception("Invalid MIME type: $mimeType");
+        }
+
+        // Check file size
         if ($file['size'] > 3 * 1024 * 1024) {
             throw new Exception("File size exceeds the maximum limit of 3MB.");
         }
 
+        // Generate unique file path
         $filePath = '/uploads/' . uniqid() . '.' . $fileExt;
+
+        // Move the uploaded file to the designated folder
         if (!move_uploaded_file($file['tmp_name'], __DIR__ . '/../../public' . $filePath)) {
             throw new Exception("Failed to move uploaded file.");
         }
