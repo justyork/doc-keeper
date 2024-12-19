@@ -1,5 +1,13 @@
 <?php include __DIR__ . '/partials/header.php'; ?>
 
+<h1>Upload</h1>
+
+<?php if (isset($_GET['success'])): ?>
+    <div class="success-messages">
+        <p>Upload successful!</p>
+    </div>
+<?php endif; ?>
+
 <?php if (!empty($errors)): ?>
     <div class="error-messages">
         <ul>

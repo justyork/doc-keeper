@@ -44,7 +44,7 @@ class UploadController {
             try {
                 $upload = new Upload();
                 $upload->save($data);
-                header('Location: /view');
+                header('Location: /upload?success');
                 exit;
             } catch (Exception $e) {
                 $errors[] = "Failed to save the data: " . $e->getMessage();
