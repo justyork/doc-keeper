@@ -8,7 +8,7 @@
     <script type="text/javascript">
         var onloadCallback = function() {
             grecaptcha.render('captcha_block', {
-                'sitekey' : '<?= getenv('RECAPTCHA_SITE_KEY'); ?>'
+                'sitekey' : '<?= env('RECAPTCHA_SITE_KEY'); ?>'
             });
         };
     </script>

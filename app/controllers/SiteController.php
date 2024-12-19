@@ -10,7 +10,7 @@ class SiteController {
     private ?string $error = null;
 
     public function login($password) {
-        if (isset($password) && $password === getenv('ADMIN_PASSWORD')) {
+        if (isset($password) && $password === env('ADMIN_PASSWORD')) {
             Auth::login($password);
         }
         $this->error = 'Invalid password';

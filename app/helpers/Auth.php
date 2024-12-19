@@ -11,7 +11,7 @@ class Auth {
     }
 
     public static function login($password) {
-        if (isset($password) && $password === getenv('ADMIN_PASSWORD')) {
+        if (isset($password) && $password === env('ADMIN_PASSWORD')) {
             $_SESSION['logged_in'] = true;
 
             setcookie(session_name(), session_id(), time() + 3600, "/");

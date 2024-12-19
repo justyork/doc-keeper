@@ -24,8 +24,8 @@ class Dotenv {
     }
 }
 
-if (function_exists('getenv') === false) {
-    function getenv($key) {
+if (function_exists('env') === false) {
+    function env($key) {
         $value = $_ENV[$key];
         if ($value === false) {
             return false;

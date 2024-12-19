@@ -10,7 +10,7 @@ require_once __DIR__ . '/../models/ResourceType.php';
 class UploadController {
     public function handleUpload(): void {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $recaptchaSecret = getenv("RECAPTCHA_SECRET");
+            $recaptchaSecret = env("RECAPTCHA_SECRET");
 
             $response = $_POST['g-recaptcha-response'];
             $remoteIp = $_SERVER['REMOTE_ADDR'];
