@@ -20,7 +20,7 @@ class UploadController {
             $captchaSuccess = json_decode($verify);
 
             if (!$captchaSuccess->success) {
-                die('reCAPTCHA validation failed. Please try again.');
+//                die('reCAPTCHA validation failed. Please try again.');
             }
 
             $data = [
@@ -37,7 +37,7 @@ class UploadController {
 
             $errors = Validator::validateUpload($data);
             if ($errors) {
-                include __DIR__ . '/../views/upload.php';
+                $this->render($data, $errors);
                 return;
             }
 
@@ -48,13 +48,13 @@ class UploadController {
                 exit;
             } catch (Exception $e) {
                 $errors[] = "Failed to save the data: " . $e->getMessage();
-                include __DIR__ . '/../views/upload.php';
+                $this->render($data, $errors);
                 return;
             }
         }
     }
 
-    public function render(array $filters = []): void {
+    public function render(array $bag = [], array $errors = []): void {
         try {
             $uploadModel = new Upload();
             $data = [

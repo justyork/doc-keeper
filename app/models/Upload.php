@@ -16,6 +16,10 @@ class Upload {
             throw new Exception("Failed to prepare statement: " . $this->db->error);
         }
 
+        if ($data['file'] && !$data['file']['full_path']) {
+            $data['file'] = null;
+        }
+
         $fileType = $data['file'] ? 'file' : 'url';
         $filePath = $data['file'] ? $this->handleFileUpload($data['file']) : $data['file_url'];
 

@@ -15,7 +15,7 @@ class Validator {
             $errors[] = "You must upload a file or provide a URL.";
         }
 
-        if ($data['file'] && $data['file_url']) {
+        if ($data['file'] && $data['file']['full_path'] && $data['file_url']) {
             $errors[] = "You can only upload a file OR provide a URL, not both.";
         }
 

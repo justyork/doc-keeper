@@ -1,3 +1,4 @@
 </div>
+<script type="text/javascript" src="/assets/js/upload.js"></script>
 </body>
 </html>
