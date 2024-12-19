@@ -2,7 +2,7 @@
 require_once '../app/helpers/Dotenv.php';
 Dotenv::load(__DIR__ . '/../.env');
 
-require_once '../app/helpers/database.php';
+require_once '../app/helpers/Database.php';
 
 $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
