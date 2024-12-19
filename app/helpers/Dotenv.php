@@ -23,3 +23,14 @@ class Dotenv {
         }
     }
 }
+
+if (function_exists('getenv') === false) {
+    function getenv($key) {
+        $value = $_ENV[$key];
+        if ($value === false) {
+            return false;
+        }
+
+        return $value;
+    }
+}
