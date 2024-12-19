@@ -20,7 +20,7 @@ class UploadController {
             $captchaSuccess = json_decode($verify);
 
             if (!$captchaSuccess->success) {
-//                die('reCAPTCHA validation failed. Please try again.');
+                die('reCAPTCHA validation failed. Please try again.');
             }
 
             $data = [
