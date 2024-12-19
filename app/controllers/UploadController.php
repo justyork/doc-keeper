@@ -19,10 +19,6 @@ class UploadController {
 
             $captchaSuccess = json_decode($verify);
 
-            if (!$captchaSuccess->success) {
-                die('reCAPTCHA validation failed. Please try again.');
-            }
-
             $data = [
                 'title' => $_POST['title'] ?? '',
                 'description' => $_POST['description'] ?? '',
@@ -34,6 +30,12 @@ class UploadController {
                 'file' => $_FILES['file'] ?? null,
                 'file_url' => $_POST['file_url'] ?? null,
             ];
+
+            if (!$captchaSuccess->success) {
+                $errors[] = "reCAPTCHA validation failed. Please try again.";
+                $this->render($data, $errors);
+                return;
+            }
 
             $errors = Validator::validateUpload($data);
             if ($errors) {
