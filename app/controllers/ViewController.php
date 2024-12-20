@@ -5,8 +5,10 @@ require_once __DIR__ . '/../models/Standard.php';
 require_once __DIR__ . '/../models/Subtopic.php';
 require_once __DIR__ . '/../models/ResourceType.php';
 
-class ViewController {
-    public function getDropdownData() {
+class ViewController
+{
+    public function getDropdownData()
+    {
         $db = Database::getConnection();
 
         $tables = ['subjects', 'subtopics', 'standards', 'resource_types'];
@@ -24,7 +26,8 @@ class ViewController {
         echo json_encode($result);
     }
 
-    public function render($filters = []) {
+    public function render($filters = [])
+    {
         $uploadModel = new Upload();
         $data = $uploadModel->getAll($filters);
 

@@ -1,16 +1,19 @@
 <?php
 
-class Upload {
+class Upload
+{
     private $db;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->db = Database::getConnection();
     }
 
-    public function save($data) {
+    public function save($data)
+    {
         $stmt = $this->db->prepare("
-            INSERT INTO uploads (title, description, author, subject, subtopic, standard, resource_type, file_path, file_url, file_type)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO uploads (title, email, description, author, subject, subtopic, standard, resource_type, file_path, file_url, file_type)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ");
         if (!$stmt) {
             throw new Exception("Failed to prepare statement: " . $this->db->error);
@@ -24,8 +27,8 @@ class Upload {
         $filePath = $data['file'] ? $this->handleFileUpload($data['file']) : $data['file_url'];
 
         $stmt->bind_param(
-            'sssiiissss',
-            $data['title'], $data['description'], $data['author'],
+            'ssssiiissss',
+            $data['title'], $data['email'], $data['description'], $data['author'],
             $data['subject'], $data['subtopic'], $data['standard'],
             $data['resource_type'], $filePath, $data['file_url'], $fileType
         );
@@ -35,7 +38,8 @@ class Upload {
         }
     }
 
-    public function getAll($filters = []) {
+    public function getAll($filters = [])
+    {
         $sql = "SELECT uploads.*, subjects.name as subject_name, subtopics.name as subtopic_name, standards.name as standard_name, resource_types.name as resource_type_name
             FROM uploads
             LEFT JOIN subjects ON uploads.subject = subjects.id
@@ -88,7 +92,8 @@ class Upload {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         $stmt = $this->db->prepare("DELETE FROM uploads WHERE id = ?");
         if (!$stmt) {
             throw new Exception("Failed to prepare statement: " . $this->db->error);
@@ -104,7 +109,8 @@ class Upload {
         }
     }
 
-    private function handleFileUpload($file) {
+    private function handleFileUpload($file)
+    {
         $config = include __DIR__ . '/../../config/config.php';
         $allowedExtensions = $config['allowed_extensions'];
         $allowedMimeTypes = $config['allowed_mime_types'];
@@ -140,10 +146,11 @@ class Upload {
         return $filePath;
     }
 
-    public function update($id, $data) {
+    public function update($id, $data)
+    {
         $stmt = $this->db->prepare("
         UPDATE uploads
-        SET title = ?, description = ?, author = ?, subject = ?, subtopic = ?, standard = ?, resource_type = ?, file_path = ?, file_url = ?, file_type = ?
+        SET title = ?, email = ?, description = ?, author = ?, subject = ?, subtopic = ?, standard = ?, resource_type = ?, file_path = ?, file_url = ?, file_type = ?
         WHERE id = ?
     ");
         if (!$stmt) {
@@ -154,8 +161,8 @@ class Upload {
         $filePath = isset($data['file']) ? $this->handleFileUpload($data['file']) : (isset($data['file_url']) ? $data['file_url'] : '');
 
         $stmt->bind_param(
-            'sssiiissssi',
-            $data['title'], $data['description'], $data['author'],
+            'ssssiiissssi',
+            $data['title'], $data['email'], $data['description'], $data['author'],
             $data['subject'], $data['subtopic'], $data['standard'],
             $data['resource_type'], $filePath, $data['file_url'], $fileType, $id
         );
@@ -165,7 +172,8 @@ class Upload {
         }
     }
 
-    public function getById($id) {
+    public function getById($id)
+    {
         $stmt = $this->db->prepare("SELECT * FROM uploads WHERE id = ?");
         if (!$stmt) {
             throw new Exception("Failed to prepare statement: " . $this->db->error);
@@ -178,5 +186,6 @@ class Upload {
 
         $result = $stmt->get_result();
         return $result->fetch_assoc();
+
     }
 }

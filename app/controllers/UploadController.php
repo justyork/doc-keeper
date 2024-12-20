@@ -7,8 +7,10 @@ require_once __DIR__ . '/../models/Standard.php';
 require_once __DIR__ . '/../models/Subtopic.php';
 require_once __DIR__ . '/../models/ResourceType.php';
 
-class UploadController {
-    public function handleUpload(): void {
+class UploadController
+{
+    public function handleUpload(): void
+    {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $recaptchaSecret = env("RECAPTCHA_SECRET");
 
@@ -21,6 +23,7 @@ class UploadController {
 
             $data = [
                 'title' => $_POST['title'] ?? '',
+                'email' => $_POST['email'] ?? '',
                 'description' => $_POST['description'] ?? '',
                 'author' => $_POST['author'] ?? '',
                 'subject' => $_POST['subject'] ?? '',
@@ -56,8 +59,13 @@ class UploadController {
         }
     }
 
-    public function render(array $bag = [], array $errors = []): void {
+    public function render(array $bag = [], array $errors = []): void
+    {
         try {
+
+            $config = include __DIR__ . '/../../config/config.php';
+            $allowedExtensions = array_map(fn($el) => '.' . $el, $config['allowed_extensions']);
+
             $uploadModel = new Upload();
             $data = [
                 'subjects' => (new Subject())->getAll(),

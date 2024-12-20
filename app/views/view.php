@@ -30,6 +30,7 @@
         <button type="submit">Filter</button>
     </form>
 
+<div class="table-wrap">
     <table border="1">
         <thead>
         <tr>
@@ -62,5 +63,6 @@
         <?php endforeach; ?>
         </tbody>
     </table>
+</div>
 
 <?php include __DIR__ . '/partials/footer.php'; ?>

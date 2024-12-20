@@ -1,7 +1,9 @@
 <?php
 
-class Validator {
-    public static function validateUpload($data) {
+class Validator
+{
+    public static function validateUpload($data)
+    {
         $errors = [];
         if (strlen($data['title']) < 20) {
             $errors[] = "Title must be at least 20 characters.";

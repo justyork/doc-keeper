@@ -10,8 +10,17 @@ abstract class BaseModel {
     abstract protected function getTableName();
     abstract public function getColumns();
 
-    public function getAll() {
-        $stmt = $this->db->prepare("SELECT * FROM " . $this->getTableName());
+    public function getAll($filters = []) {
+        $query = "SELECT * FROM " . $this->getTableName();
+        if (!empty($filters)) {
+            $whereClause = implode(" AND ", array_map(fn($key) => "$key = ?", array_keys($filters)));
+            $query .= " WHERE $whereClause";
+            $stmt = $this->db->prepare($query);
+            $stmt->bind_param(str_repeat('s', count($filters)), ...array_values($filters));
+        } else {
+            $stmt = $this->db->prepare($query);
+        }
+
         if (!$stmt) {
             throw new Exception("Failed to prepare statement: " . $this->db->error);
         }

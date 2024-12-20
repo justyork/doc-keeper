@@ -1,7 +1,9 @@
 <?php
 
-class Dotenv {
-    public static function load($path) {
+class Dotenv
+{
+    public static function load($path)
+    {
         if (!file_exists($path)) {
             throw new InvalidArgumentException(sprintf('%s does not exist', $path));
         }
@@ -25,7 +27,8 @@ class Dotenv {
 }
 
 if (function_exists('env') === false) {
-    function env($key) {
+    function env($key)
+    {
         $value = $_ENV[$key];
         if ($value === false) {
             return false;
