@@ -38,8 +38,8 @@ class AdminController
         $file = $uploadModel->getById($id);
 
         $subjects = (new Subject())->getAll();
-        $subtopics = (new Subtopic())->getAll();
-        $standards = (new Standard())->getAll();
+        $subtopics = (new Subtopic())->getAll(['subject_id' => $file['subject']]);
+        $standards = (new Standard())->getAll(['subtopic_id' => $file['subtopic']]);
         $resource_types = (new ResourceType())->getAll();
 
         include __DIR__ . '/../views/edit.php';
