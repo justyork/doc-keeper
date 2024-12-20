@@ -27,6 +27,10 @@
             <label for="author">Author</label>
             <input type="text" name="author" id="author" placeholder="Author" value="<?= htmlspecialchars($bag['author'] ?? '') ?>" required>
         </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" placeholder="Email" value="<?= htmlspecialchars($bag['email'] ?? '') ?>" required>
+        </div>
         <div class="form-group char-counter">
             <label for="description">Description</label>
             <textarea name="description" id="description" placeholder="Description (min 100 characters)" minlength="100" required><?= htmlspecialchars($bag['description'] ?? '') ?></textarea>
@@ -44,18 +48,12 @@
             <label for="subtopic">Subtopic</label>
             <select name="subtopic" id="subtopic" required>
                 <option value="">Select Subtopic</option>
-                <?php foreach ($data['subtopics'] as $subtopic): ?>
-                    <option value="<?= htmlspecialchars($subtopic['id']) ?>" <?= (isset($bag['subtopic']) && $bag['subtopic'] == $subtopic['id']) ? 'selected' : '' ?>><?= htmlspecialchars($subtopic['name']) ?></option>
-                <?php endforeach; ?>
             </select>
         </div>
         <div class="form-group">
             <label for="standard">Standard</label>
             <select name="standard" id="standard" required>
                 <option value="">Select Standard</option>
-                <?php foreach ($data['standards'] as $standard): ?>
-                    <option value="<?= htmlspecialchars($standard['id']) ?>" <?= (isset($bag['standard']) && $bag['standard'] == $standard['id']) ? 'selected' : '' ?>><?= htmlspecialchars($standard['name']) ?></option>
-                <?php endforeach; ?>
             </select>
         </div>
         <div class="form-group">
@@ -69,7 +67,7 @@
         </div>
         <div class="form-group">
             <label for="file">File</label>
-            <input type="file" name="file" id="file" accept=".pdf,.docx,.doc,.pptx,.ppt,.xlsx,.xls,.ods,.odt,.odp,.txt,.zip,.jpg,.jpeg,.png,.gif">
+            <input type="file" name="file" id="file" accept="<?=implode(',', $allowedExtensions)?>">
         </div>
         <div class="form-group">
             <label for="file_url">Google Docs URL</label>
@@ -84,6 +82,40 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             initCounter();
+
+            const subjectSelect = document.getElementById('subject');
+            const subtopicSelect = document.getElementById('subtopic');
+            const standardSelect = document.getElementById('standard');
+
+            subjectSelect.addEventListener('change', function () {
+                const subjectId = this.value;
+                fetch(`/api?action=subtopics&id=${subjectId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        subtopicSelect.innerHTML = '<option value="">Select Subtopic</option>';
+                        data.forEach(subtopic => {
+                            subtopicSelect.innerHTML += `<option value="${subtopic.id}">${subtopic.name}</option>`;
+                        });
+                        subtopicSelect.dispatchEvent(new Event('change'));
+                    });
+            });
+
+            subtopicSelect.addEventListener('change', function () {
+                const subtopicId = this.value;
+                fetch(`/api?action=standards&id=${subtopicId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        standardSelect.innerHTML = '<option value="">Select Standard</option>';
+                        data.forEach(standard => {
+                            standardSelect.innerHTML += `<option value="${standard.id}">${standard.name}</option>`;
+                        });
+                    });
+            });
+
+            // Инициализация при загрузке страницы
+            if (subjectSelect.value) {
+                subjectSelect.dispatchEvent(new Event('change'));
+            }
         });
     </script>
 

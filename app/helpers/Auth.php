@@ -1,7 +1,10 @@
 <?php
 session_start();
-class Auth {
-    public static function check() {
+
+class Auth
+{
+    public static function check()
+    {
         if (empty($_SESSION['logged_in'])) {
             header('Location: login');
             exit;
@@ -10,7 +13,8 @@ class Auth {
         setcookie(session_name(), session_id(), time() + 3600, "/");
     }
 
-    public static function login($password) {
+    public static function login($password)
+    {
         if (isset($password) && $password === env('ADMIN_PASSWORD')) {
             $_SESSION['logged_in'] = true;
 
@@ -20,7 +24,8 @@ class Auth {
         }
     }
 
-    public static function logout() {
+    public static function logout()
+    {
         session_destroy();
         setcookie(session_name(), session_id(), time() - 3600, "/");
         header('Location: /login');

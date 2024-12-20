@@ -2,19 +2,22 @@
 
 require_once __DIR__ . '/../helpers/Auth.php';
 
-abstract class CrudController {
+abstract class CrudController
+{
     protected $model;
     protected $modelName;
     protected $templatePath = 'crud';
     protected $viewPath;
 
-    public function __construct($model, $viewPath) {
+    public function __construct($model, $viewPath)
+    {
         $this->modelName = $model;
         $this->model = new $model();
         $this->viewPath = $viewPath;
     }
 
-    public function index() {
+    public function index()
+    {
         Auth::check();
 
         $title = $this->modelName;
@@ -24,7 +27,8 @@ abstract class CrudController {
         include __DIR__ . '/../views/' . $this->templatePath . '/index.php';
     }
 
-    public function create() {
+    public function create()
+    {
         Auth::check();
 
         $title = $this->modelName;
@@ -33,7 +37,8 @@ abstract class CrudController {
         include __DIR__ . '/../views/' . $this->templatePath . '/create.php';
     }
 
-    public function store($data) {
+    public function store($data)
+    {
         Auth::check();
 
         $this->model->save($data);
@@ -41,7 +46,8 @@ abstract class CrudController {
         exit;
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         Auth::check();
 
         $title = $this->modelName;
@@ -51,7 +57,8 @@ abstract class CrudController {
         include __DIR__ . '/../views/' . $this->templatePath . '/edit.php';
     }
 
-    public function update($id, $data) {
+    public function update($id, $data)
+    {
         Auth::check();
 
         $this->model->update($id, $data);
@@ -59,7 +66,8 @@ abstract class CrudController {
         exit;
     }
 
-    public function delete($id) {
+    public function delete($id)
+    {
         Auth::check();
 
         $this->model->delete($id);

@@ -1,8 +1,10 @@
 <?php
 require_once __DIR__ . '/../models/Upload.php';
 
-class DownloadController {
-    public function render($id) {
+class DownloadController
+{
+    public function render($id)
+    {
         $uploadModel = new Upload();
         $file = $uploadModel->getById($id);
 
@@ -13,7 +15,8 @@ class DownloadController {
         include __DIR__ . '/../views/download.php';
     }
 
-    public function download($id) {
+    public function download($id)
+    {
         $uploadModel = new Upload();
         $file = $uploadModel->getById($id);
 

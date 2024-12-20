@@ -1,8 +1,11 @@
 <?php
-class Database {
+
+class Database
+{
     private static $connection;
 
-    public static function getConnection() {
+    public static function getConnection()
+    {
         if (!self::$connection) {
             $config = include __DIR__ . '/../../config/database.php';
             self::$connection = new mysqli(

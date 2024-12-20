@@ -7,8 +7,10 @@ require_once __DIR__ . '/../models/Standard.php';
 require_once __DIR__ . '/../models/Subtopic.php';
 require_once __DIR__ . '/../models/ResourceType.php';
 
-class AdminController {
-    public function delete($id) {
+class AdminController
+{
+    public function delete($id)
+    {
         Auth::check();
 
         $uploadModel = new Upload();
@@ -18,7 +20,8 @@ class AdminController {
         exit;
     }
 
-    public function showAll() {
+    public function showAll()
+    {
         Auth::check();
 
         $uploadModel = new Upload();
@@ -27,7 +30,8 @@ class AdminController {
         include __DIR__ . '/../views/admin.php';
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         Auth::check();
 
         $uploadModel = new Upload();
@@ -41,7 +45,8 @@ class AdminController {
         include __DIR__ . '/../views/edit.php';
     }
 
-    public function update($id, $data) {
+    public function update($id, $data)
+    {
         Auth::check();
 
         $uploadModel = new Upload();
