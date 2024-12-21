@@ -3,19 +3,19 @@
     <h1>Uploaded Files</h1>
 
     <form method="GET" action="/view">
-        <select name="subject">
+        <select name="subject" id="subject">
             <option value="">All Subjects</option>
             <?php foreach ($subjects as $subject): ?>
                 <option value="<?= htmlspecialchars($subject['id']) ?>" <?= isset($_GET['subject']) && $_GET['subject'] == $subject['id'] ? 'selected' : '' ?>><?= htmlspecialchars($subject['name']) ?></option>
             <?php endforeach; ?>
         </select>
-        <select name="subtopic">
+        <select name="subtopic" id="subtopic">
             <option value="">All Subtopics</option>
             <?php foreach ($subtopics as $subtopic): ?>
                 <option value="<?= htmlspecialchars($subtopic['id']) ?>" <?= isset($_GET['subtopic']) && $_GET['subtopic'] == $subtopic['id'] ? 'selected' : '' ?>><?= htmlspecialchars($subtopic['name']) ?></option>
             <?php endforeach; ?>
         </select>
-        <select name="standard">
+        <select name="standard" id="standard">
             <option value="">All Standards</option>
             <?php foreach ($standards as $standard): ?>
                 <option value="<?= htmlspecialchars($standard['id']) ?>" <?= isset($_GET['standard']) && $_GET['standard'] == $standard['id'] ? 'selected' : '' ?>><?= htmlspecialchars($standard['name']) ?></option>
@@ -65,4 +65,10 @@
     </table>
 </div>
 
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fieldsOnChange();
+        });
+    </script>
 <?php include __DIR__ . '/partials/footer.php'; ?>

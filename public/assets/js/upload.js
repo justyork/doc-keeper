@@ -39,3 +39,33 @@ function initCounter() {
         updateCounter(); // Initial count
     });
 }
+
+function fieldsOnChange() {
+    const subjectSelect = document.getElementById('subject');
+    const subtopicSelect = document.getElementById('subtopic');
+    const standardSelect = document.getElementById('standard');
+    subjectSelect.addEventListener('change', function () {
+        const subjectId = this.value;
+        fetch(`/api?action=subtopics&id=${subjectId}`)
+            .then(response => response.json())
+            .then(data => {
+                subtopicSelect.innerHTML = '<option value="">Select Subtopic</option>';
+                data.forEach(subtopic => {
+                    subtopicSelect.innerHTML += `<option value="${subtopic.id}">${subtopic.name}</option>`;
+                });
+                subtopicSelect.dispatchEvent(new Event('change'));
+            });
+    });
+
+    subtopicSelect.addEventListener('change', function () {
+        const subtopicId = this.value;
+        fetch(`/api?action=standards&id=${subtopicId}`)
+            .then(response => response.json())
+            .then(data => {
+                standardSelect.innerHTML = '<option value="">Select Standard</option>';
+                data.forEach(standard => {
+                    standardSelect.innerHTML += `<option value="${standard.id}">${standard.name}</option>`;
+                });
+            });
+    });
+}

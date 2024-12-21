@@ -2,7 +2,7 @@
 
 <h1>Edit File</h1>
 
-<form action="/edit?id=<?= htmlspecialchars($file['id']) ?>" method="POST">
+<form action="/edit?id=<?= htmlspecialchars($file['id']) ?>" method="POST" enctype="multipart/form-data">
     <div class="form-group">
         <label for="title">Title</label>
         <input type="text" name="title" id="title" value="<?= htmlspecialchars($file['title']) ?>" required>
@@ -10,6 +10,10 @@
     <div class="form-group">
         <label for="author">Author</label>
         <input type="text" name="author" id="author" value="<?= htmlspecialchars($file['author']) ?>" required>
+    </div>
+    <div class="form-group">
+        <label for="author">Email</label>
+        <input type="text" name="email" id="email" value="<?= htmlspecialchars($file['email']) ?>" required>
     </div>
     <div class="form-group">
         <label for="description">Description</label>
@@ -47,6 +51,20 @@
             <?php endforeach; ?>
         </select>
     </div>
+
+    <div class="form-group">
+        <label for="file">File</label>
+        <input type="file" name="file" id="file" accept="<?=implode(',', $allowedExtensions)?>">
+
+        <?php if ($file['file_type'] === 'file') :?>
+            <a href="<?= htmlspecialchars($file['file_path']) ?>" target="_blank">Download</a>
+        <?php endif; ?>
+    </div>
+    <div class="form-group">
+        <label for="file_url">Google Docs URL</label>
+        <input type="url" name="file_url" id="file_url" placeholder="Google Docs URL" value="<?= htmlspecialchars($file['file_url'] ?? '') ?>">
+    </div>
+
     <button type="submit">Update</button>
 </form>
 
@@ -56,33 +74,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             initCounter();
 
-            const subjectSelect = document.getElementById('subject');
-            const subtopicSelect = document.getElementById('subtopic');
-            const standardSelect = document.getElementById('standard');
-            subjectSelect.addEventListener('change', function () {
-                const subjectId = this.value;
-                fetch(`/api?action=subtopics&id=${subjectId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        subtopicSelect.innerHTML = '<option value="">Select Subtopic</option>';
-                        data.forEach(subtopic => {
-                            subtopicSelect.innerHTML += `<option value="${subtopic.id}">${subtopic.name}</option>`;
-                        });
-                        subtopicSelect.dispatchEvent(new Event('change'));
-                    });
-            });
-
-            subtopicSelect.addEventListener('change', function () {
-                const subtopicId = this.value;
-                fetch(`/api?action=standards&id=${subtopicId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        standardSelect.innerHTML = '<option value="">Select Standard</option>';
-                        data.forEach(standard => {
-                            standardSelect.innerHTML += `<option value="${standard.id}">${standard.name}</option>`;
-                        });
-                    });
-            });
+            fieldsOnChange();
         });
     </script>
 <?php include __DIR__ . '/partials/footer.php'; ?>

@@ -32,8 +32,8 @@ class ViewController
         $data = $uploadModel->getAll($filters);
 
         $subjects = (new Subject())->getAll();
-        $subtopics = (new Subtopic())->getAll();
-        $standards = (new Standard())->getAll();
+        $subtopics = (new Subtopic())->getAll(['subject_id' => $filters['subject'] ?? null]);
+        $standards = (new Standard())->getAll(['subtopic_id' => $filters['subtopic'] ?? null]);
         $resource_types = (new ResourceType())->getAll();
 
         include __DIR__ . '/../views/view.php';

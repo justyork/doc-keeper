@@ -45,7 +45,8 @@ class Upload
             LEFT JOIN subjects ON uploads.subject = subjects.id
             LEFT JOIN subtopics ON uploads.subtopic = subtopics.id
             LEFT JOIN standards ON uploads.standard = standards.id
-            LEFT JOIN resource_types ON uploads.resource_type = resource_types.id";
+            LEFT JOIN resource_types ON uploads.resource_type = resource_types.id
+          ";
         $params = [];
         $types = '';
         $conditions = [];
@@ -75,6 +76,7 @@ class Upload
             $sql .= ' WHERE ' . implode(' AND ', $conditions);
         }
 
+        $sql .= ' ORDER BY uploads.id DESC';
         $stmt = $this->db->prepare($sql);
         if (!$stmt) {
             throw new Exception("Failed to prepare statement: " . $this->db->error);
@@ -117,6 +119,7 @@ class Upload
 
         // Check file extension
         $fileExt = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+        $origFileName = pathinfo($file['name'], PATHINFO_FILENAME);
         if (!in_array($fileExt, $allowedExtensions)) {
             throw new Exception("Invalid file extension: $fileExt");
         }
@@ -136,7 +139,7 @@ class Upload
         }
 
         // Generate unique file path
-        $filePath = '/uploads/' . uniqid() . '.' . $fileExt;
+        $filePath = '/uploads/' . $origFileName . '-' . uniqid() . '.' . $fileExt;
 
         // Move the uploaded file to the designated folder
         if (!move_uploaded_file($file['tmp_name'], __DIR__ . '/../../public' . $filePath)) {
@@ -174,7 +177,17 @@ class Upload
 
     public function getById($id)
     {
-        $stmt = $this->db->prepare("SELECT * FROM uploads WHERE id = ?");
+        $stmt = $this->db->prepare("SELECT uploads.*, 
+            subjects.name as subject_name, 
+            subtopics.name as subtopic_name, 
+            standards.name as standard_name, 
+            resource_types.name as resource_type_name
+            FROM uploads
+            LEFT JOIN subjects ON uploads.subject = subjects.id
+            LEFT JOIN subtopics ON uploads.subtopic = subtopics.id
+            LEFT JOIN standards ON uploads.standard = standards.id
+            LEFT JOIN resource_types ON uploads.resource_type = resource_types.id
+            WHERE uploads.id = ?");
         if (!$stmt) {
             throw new Exception("Failed to prepare statement: " . $this->db->error);
         }

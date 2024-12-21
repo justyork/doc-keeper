@@ -34,6 +34,9 @@ class AdminController
     {
         Auth::check();
 
+        $config = include __DIR__ . '/../../config/config.php';
+        $allowedExtensions = array_map(fn($el) => '.' . $el, $config['allowed_extensions']);
+
         $uploadModel = new Upload();
         $file = $uploadModel->getById($id);
 
@@ -45,9 +48,22 @@ class AdminController
         include __DIR__ . '/../views/edit.php';
     }
 
-    public function update($id, $data)
+    public function update($id)
     {
         Auth::check();
+
+        $data = [
+            'title' => $_POST['title'] ?? '',
+            'email' => $_POST['email'] ?? '',
+            'description' => $_POST['description'] ?? '',
+            'author' => $_POST['author'] ?? '',
+            'subject' => $_POST['subject'] ?? '',
+            'subtopic' => $_POST['subtopic'] ?? '',
+            'standard' => $_POST['standard'] ?? '',
+            'resource_type' => $_POST['resource_type'] ?? '',
+            'file' => $_FILES['file'] ?? null,
+            'file_url' => $_POST['file_url'] ?? null,
+        ];
 
         $uploadModel = new Upload();
         $uploadModel->update($id, $data);

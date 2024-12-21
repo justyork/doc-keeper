@@ -62,7 +62,6 @@ class UploadController
     public function render(array $bag = [], array $errors = []): void
     {
         try {
-
             $config = include __DIR__ . '/../../config/config.php';
             $allowedExtensions = array_map(fn($el) => '.' . $el, $config['allowed_extensions']);
 

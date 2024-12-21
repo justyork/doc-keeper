@@ -16,19 +16,19 @@
         </tr>
         <tr>
             <td>Subject:</td>
-            <td><?= htmlspecialchars($file['subject']) ?></td>
+            <td><?= htmlspecialchars($file['subject_name']) ?></td>
         </tr>
         <tr>
             <td>Subtopic:</td>
-            <td><?= htmlspecialchars($file['subtopic']) ?></td>
+            <td><?= htmlspecialchars($file['subtopic_name']) ?></td>
         </tr>
         <tr>
             <td>Standard:</td>
-            <td><?= htmlspecialchars($file['standard']) ?></td>
+            <td><?= htmlspecialchars($file['standard_name']) ?></td>
         </tr>
         <tr>
             <td>Resource Type:</td>
-            <td><?= htmlspecialchars($file['resource_type']) ?></td>
+            <td><?= htmlspecialchars($file['resource_type_name']) ?></td>
         </tr>
         <tr>
             <td>Datetime:</td>

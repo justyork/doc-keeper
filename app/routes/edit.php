@@ -10,16 +10,7 @@ if (!$id) {
 $controller = new AdminController();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $data = [
-        'title' => $_POST['title'],
-        'author' => $_POST['author'],
-        'description' => $_POST['description'],
-        'subject' => $_POST['subject'],
-        'subtopic' => $_POST['subtopic'],
-        'standard' => $_POST['standard'],
-        'resource_type' => $_POST['resource_type'],
-    ];
-    $controller->update($id, $data);
+    $controller->update($id);
 } else {
     $controller->edit($id);
 }
