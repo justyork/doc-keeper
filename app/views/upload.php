@@ -82,6 +82,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             initCounter();
+            fileChecker();
             fieldsOnChange();
         });
     </script>

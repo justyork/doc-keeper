@@ -1,10 +1,11 @@
 
-function initCounter() {
+function fileChecker(canBeEmpty = false) {
     document.querySelector('form').addEventListener('submit', function (e) {
         const fileInput = document.querySelector('input[name="file"]');
         const urlInput = document.querySelector('input[name="file_url"]');
 
-        if ((fileInput.value && urlInput.value) || (!fileInput.value && !urlInput.value)) {
+        let fileValidation = canBeEmpty ? false : (!fileInput.value && !urlInput.value);
+        if ((fileInput.value && urlInput.value) || fileValidation) {
             e.preventDefault();
             alert('Please upload either a file or a Google URL, not both.');
             return;
@@ -15,7 +16,8 @@ function initCounter() {
             alert('The URL must contain google.com.');
         }
     });
-
+}
+function initCounter() {
     const charCounters = document.querySelectorAll('.char-counter');
 
     charCounters.forEach(counterContainer => {

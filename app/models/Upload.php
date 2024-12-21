@@ -27,7 +27,7 @@ class Upload
         $filePath = $data['file'] ? $this->handleFileUpload($data['file']) : $data['file_url'];
 
         $stmt->bind_param(
-            'ssssiiissss',
+            'ssssiiiisss',
             $data['title'], $data['email'], $data['description'], $data['author'],
             $data['subject'], $data['subtopic'], $data['standard'],
             $data['resource_type'], $filePath, $data['file_url'], $fileType
@@ -151,24 +151,42 @@ class Upload
 
     public function update($id, $data)
     {
+        $hasFile = false;
+        if (($data['file'] && $data['file']['tmp_name']) || $data['file_url']) {
+            if ($data['file'] && !$data['file']['full_path']) {
+                $data['file'] = null;
+            }
+
+            $fileType = $data['file'] ? 'file' : 'url';
+            $filePath = $data['file'] ? $this->handleFileUpload($data['file']) : $data['file_url'];
+
+            $hasFile = true;
+        }
+
         $stmt = $this->db->prepare("
         UPDATE uploads
-        SET title = ?, email = ?, description = ?, author = ?, subject = ?, subtopic = ?, standard = ?, resource_type = ?, file_path = ?, file_url = ?, file_type = ?
-        WHERE id = ?
+        SET title = ?, email = ?, description = ?, author = ?, subject = ?, subtopic = ?, standard = ?, resource_type = ?".
+            ($hasFile ? ', file_path = ?, file_url = ?, file_type = ?' : '')
+            ." WHERE id = ?
     ");
         if (!$stmt) {
             throw new Exception("Failed to prepare statement: " . $this->db->error);
         }
 
-        $fileType = isset($data['file']) ? 'file' : 'url';
-        $filePath = isset($data['file']) ? $this->handleFileUpload($data['file']) : (isset($data['file_url']) ? $data['file_url'] : '');
-
-        $stmt->bind_param(
-            'ssssiiissssi',
+        $params = [
             $data['title'], $data['email'], $data['description'], $data['author'],
-            $data['subject'], $data['subtopic'], $data['standard'],
-            $data['resource_type'], $filePath, $data['file_url'], $fileType, $id
-        );
+            $data['subject'], $data['subtopic'], $data['standard'], $data['resource_type']];
+        $types = 'ssssiiii';
+        if ($hasFile) {
+            $params[] = $filePath;
+            $params[] = $data['file_url'];
+            $params[] = $fileType;
+            $types .= 'sss';
+        }
+        $types .= 'i';
+        $params[] = $id;
+        $stmt->bind_param($types, ...$params);
+
 
         if (!$stmt->execute()) {
             throw new Exception("Failed to execute statement: " . $stmt->error);
